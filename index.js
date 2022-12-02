@@ -3,15 +3,17 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const mongoose = require("mongoose");
+
 const bodyParser = require('body-parser');
 // To laod environment variables
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
 
+const Video = require('./models/video');
 
 const app = express();
-// app.use(bodyParser.json());       
-// app.use(bodyParser.urlencoded({ extended: false})); 
+app.use(bodyParser.json());       
+app.use(bodyParser.urlencoded({ extended: true})); 
 const uri =
     process.env.URI
 
@@ -36,10 +38,21 @@ app.get("/", (req, res) => {
   res.send("MPD generator");
 });
 
+app.get("/getVideos", async (req,res) =>  {
+  const videoList = await Video.find();
+  if (!videoList) {
+    res.status(500).json({
+      success: false,
+    });
+    }
+    res.send(videoList);
+})
+
+
 app.post("/upload", (req, res) => {
-  
   upload(req, res, (err) => {
-    let file = req.file.filename;
+    console.log(req.body.title);
+    const file = req.file.filename ;
     if (err) {
       console.log("Error while uploading");
     }
