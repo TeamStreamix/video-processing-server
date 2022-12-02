@@ -12,12 +12,6 @@ const videoSchema = new mongoose.Schema({
         type: String,
 		required: true,
 		trim: true
-    },
-    thumbnail: {
-        type: {
-            data: Buffer,
-            contentType: String
-        }
     }
 }, {collection:'video'});
 

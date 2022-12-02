@@ -33,6 +33,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single("video");
 
 const { exec } = require("node:child_process");
+const { log } = require("console");
 
 app.get("/", (req, res) => {
   res.send("MPD generator");
@@ -49,9 +50,19 @@ app.get("/getVideos", async (req,res) =>  {
 })
 
 
-app.post("/upload", (req, res) => {
-  upload(req, res, (err) => {
-    let fileid = 15;
+app.post("/upload",  (req, res) => {
+  upload(req, res, async(err) => {
+    const vidRecordObj = {
+      title : req.body.title, 
+      description : req.body.description
+    }
+    const video = new Video(vidRecordObj) 
+    var fileid ;
+
+    fileid = (await video.save())._id.toString()
+
+    console.log(fileid);
+    // let fileid = 15;
     const file = req.file.filename ;
     if (err) {
       console.log("Error while uploading");
