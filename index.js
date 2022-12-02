@@ -3,12 +3,15 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const mongoose = require("mongoose");
-
+const bodyParser = require('body-parser');
 // To laod environment variables
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
 
+
 const app = express();
+app.use(bodyParser.json());       
+app.use(bodyParser.urlencoded({ extended: true})); 
 const uri =
     process.env.URI
 
@@ -34,6 +37,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", (req, res) => {
+  
+
   upload(req, res, (err) => {
     let file = req.file.filename;
     if (err) {

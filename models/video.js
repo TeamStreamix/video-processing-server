@@ -19,7 +19,7 @@ const videoSchema = new mongoose.Schema({
             contentType: String
         }
     }
-});
+}, {collection:'video'});
 
 const videoModel = mongoose.model('Video', videoSchema);
 
