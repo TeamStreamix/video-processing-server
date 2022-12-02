@@ -51,7 +51,7 @@ app.get("/getVideos", async (req,res) =>  {
 
 app.post("/upload", (req, res) => {
   upload(req, res, (err) => {
-    let fileid = 15;
+    let fileid = 20;
     const file = req.file.filename ;
     if (err) {
       console.log("Error while uploading");
@@ -69,9 +69,7 @@ app.post("/upload", (req, res) => {
 
     filename = filename.split(".")[0];
     console.log(filename)
-    let thumbnailcmd = `ffmpeg -i ./uploads/${filename}.mp4 -vf "select=eq(n\,0)" -q:v 3 ./thumbnails/${fileid}.jpg`
-    exec(thumbnailcmd)
-
+    let thumbnailcmd = `ffmpeg -i ./uploads/${filename}.mp4 -vframes 1 ./thumbnails/${fileid}.jpg`
     let cmd = `ffmpeg -re -i ./uploads/${filename}.mp4 -map 0 -map 0 -map 0 -c:a aac -c:v libx264 -b:v:1 800k -b:v:2 500k -s:v:0 1920x1080 -s:v:1 1280x720 -s:v:2 720x480 -profile:v:1 baseline -profile:v:2 baseline -profile:v:0 main -bf 1 -keyint_min 120 -g 120 -sc_threshold 0 -b_strategy 0 -ar:a:1 22050 -use_timeline 1 -use_template 1 -adaptation_sets "id=0,streams=v id=1,streams=a" -f dash ./segments/${fileid}/${fileid}_out.mpd`;
     
     exec(cmd, (err, output) => {
@@ -80,6 +78,13 @@ app.post("/upload", (req, res) => {
         return;
       }
       console.log("Mpd file has been generated");
+      exec(thumbnailcmd,(err,output)=>{
+        if (err) {
+          console.error("could not execute command: ", err);
+          return;
+        }
+        console.log("Thumbnail has been created");
+      })
     });
   });
 });
