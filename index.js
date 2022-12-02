@@ -10,8 +10,8 @@ dotenv.config({ path: ".env" });
 
 
 const app = express();
-app.use(bodyParser.json());       
-app.use(bodyParser.urlencoded({ extended: true})); 
+// app.use(bodyParser.json());       
+// app.use(bodyParser.urlencoded({ extended: false})); 
 const uri =
     process.env.URI
 
@@ -38,7 +38,6 @@ app.get("/", (req, res) => {
 
 app.post("/upload", (req, res) => {
   
-
   upload(req, res, (err) => {
     let file = req.file.filename;
     if (err) {
