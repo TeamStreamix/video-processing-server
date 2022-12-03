@@ -67,7 +67,7 @@ app.post("/upload",  (req, res) => {
     if (err) {
       console.log("Error while uploading");
     }
-    res.send("Video processing");
+
     let filename = file.split(".")[0];
     const folderName = `segments/${fileid}`;
     try {
@@ -95,6 +95,7 @@ app.post("/upload",  (req, res) => {
           return;
         }
         console.log("Thumbnail has been created");
+        res.status(200).send("Video has processed");
       })
     });
   });
