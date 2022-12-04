@@ -81,7 +81,7 @@ app.post("/upload", (req, res) => {
     filename = filename.split(".")[0];
     let aspectsetting = `ffmpeg -y -i ./uploads/${filename}.mp4 -aspect 16:9 -c copy ./uploads/processed/${filename}.mp4`;
     let thumbnailcmd = `ffmpeg -i ./uploads/${filename}.mp4 -vframes 1 ./segments/thumbnails/${fileid}.jpg`;
-    let cmd = `ffmpeg -re -i ./uploads/processed/${filename}.mp4 -map 0 -map 0 -map 0 -c:a aac -c:v libx264 -b:v:1 800k -b:v:2 500k -s:v:0 1920x1080 -s:v:1 1280x720 -s:v:2 720x480 -profile:v:1 baseline -profile:v:2 baseline -profile:v:0 main -bf 1 -keyint_min 120 -g 120 -sc_threshold 0 -b_strategy 0 -ar:a:1 22050 -use_timeline 1 -use_template 1 -adaptation_sets "id=0,streams=v id=1,streams=a" -f dash ./segments/${fileid}/${fileid}_out.mpd`;
+    let cmd = `ffmpeg -re -i ./uploads/processed/${filename}.mp4 -map 0 -map 0 -map 0 -c:a aac -c:v libx264 -b:v:1 20000k -b:v:2 20000k -b:v:2 20000k -s:v:0 1920x1080 -s:v:1 1280x720 -s:v:2 720x480 -profile:v:1 baseline -profile:v:2 baseline -profile:v:0 main -bf 1 -keyint_min 120 -g 120 -sc_threshold 0 -b_strategy 0 -ar:a:1 22050 -use_timeline 1 -use_template 1 -adaptation_sets "id=0,streams=v id=1,streams=a" -f dash ./segments/${fileid}/${fileid}_out.mpd`;
 
     exec(aspectsetting, (err, output) => {
       if (err) {
