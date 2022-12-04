@@ -12,17 +12,9 @@ const videoSchema = new mongoose.Schema({
         type: String,
 		required: true,
 		trim: true
-    },
-    thumbnail: {
-        type: {
-            data: Buffer,
-            contentType: String
-        }
     }
 }, {collection:'video'});
 
-const videoModel = mongoose.model('Video', videoSchema);
 
-module.exports = {
-	Video: videoModel
-};
+
+module.exports =  mongoose.model('Video', videoSchema);
