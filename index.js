@@ -5,6 +5,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
+
 // To laod environment variables
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
@@ -62,7 +63,6 @@ app.post("/upload", (req, res) => {
     fileid = (await video.save())._id.toString();
 
     console.log(fileid);
-    // let fileid = 15;
     const file = req.file.filename;
     if (err) {
       console.log("Error while uploading");
